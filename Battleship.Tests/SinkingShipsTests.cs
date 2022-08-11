@@ -7,11 +7,12 @@ namespace Battleship.Tests
     [TestFixture]
     public class SinkingShipsTests
     {
-        private Ocean _ocean = new Ocean();
+        private Ocean _ocean;
 
         [SetUp]
         public void SetUp()
         {
+            _ocean = new Ocean();
             var destroyer = new Ship(4);
             _ocean.PlaceShip(destroyer, "A1", ShipOrientation.Vertical);
             var battleship = new Ship(5);

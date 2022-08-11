@@ -27,6 +27,11 @@ namespace Battleship.Core
             var cells = new List<Cell>();
             var startLocation = new Location(startingCoordinates); 
 
+            if(!CanPlaceShip(ship.Length, startingCoordinates, shipOrientation))
+            {
+                throw new ArgumentOutOfRangeException("The ship cannot be places in the specified way.");
+            }
+
             switch (shipOrientation)
             {
                 case ShipOrientation.Vertical:
@@ -48,6 +53,35 @@ namespace Battleship.Core
             }
 
             ship.OccupyCells(cells);
+        }
+
+        private bool CanPlaceShip(int shipLength, string startingCoordinates, ShipOrientation shipOrientation)
+        {
+            var startLocation = new Location(startingCoordinates);
+
+            switch (shipOrientation)
+            {
+                case ShipOrientation.Vertical:
+                    {
+                        if (startLocation.RowIndex + shipLength > Size)
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    }
+                case ShipOrientation.Horizontal:
+                    {
+                        if (startLocation.ColumnIndex + shipLength > Size)
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    }
+                default:
+                    return false;
+            }
         }
 
         public ShotResult Shoot(string coordinates)

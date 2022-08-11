@@ -1,5 +1,6 @@
 ﻿using Battleship.Core;
 using NUnit.Framework;
+using System;
 
 namespace Battleship.Tests
 {
@@ -44,6 +45,17 @@ namespace Battleship.Tests
             Assert.AreEqual(ShotResult.Hit, shotResult3);
             Assert.AreEqual(ShotResult.Hit, shotResult4);
             Assert.AreEqual(ShotResult.Sink, shotResult5);
+        }
+
+        [TestCase("G10", ShipOrientation.Vertical)]
+        [TestCase("J6", ShipOrientation.Horizontal)]
+        [TestCase("F27", ShipOrientation.Vertical)]
+        public void CannotPlaceShipOutsideTheBoard(string startCoordinates, ShipOrientation shipOrientation)
+        {
+            var ocean = new Ocean();
+            var battleship = new Ship(5);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => ocean.PlaceShip(battleship, startCoordinates, shipOrientation));
         }
     }
 }
