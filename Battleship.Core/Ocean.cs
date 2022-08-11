@@ -2,6 +2,7 @@
 namespace Battleship.Core
 {
     public enum ShotResult { Hit, Miss, Sink }
+    public enum ShipOrientation { Vertical, Horizontal }
     public class Ocean
     {
         public int Size { get; private set; }
@@ -21,12 +22,32 @@ namespace Battleship.Core
             }
         }
 
-        public void PlaceShips()
+        public void PlaceShip(Ship ship, string startingCoordinates, ShipOrientation shipOrientation)
         {
-            var destroyer = new Ship();
-            destroyer.OccupyCells(new[] { grid[0, 0], grid[1, 0], grid[2, 0], grid[3, 0] });
-            var battleship = new Ship();
-            battleship.OccupyCells(new[] { grid[9, 5], grid[9, 6], grid[9, 7], grid[9, 8], grid[9,9] });
+            var cells = new List<Cell>();
+            var startLocation = new Location(startingCoordinates); 
+
+            switch (shipOrientation)
+            {
+                case ShipOrientation.Vertical:
+                    {
+                        for (int i = 0; i < ship.Length; i++)
+                        {
+                            cells.Add(grid[startLocation.RowIndex + i, startLocation.ColumnIndex]);
+                        }
+                    }
+                    break;
+                case ShipOrientation.Horizontal:
+                    {
+                        for (int i = 0; i < ship.Length; i++)
+                        {
+                            cells.Add(grid[startLocation.RowIndex, startLocation.ColumnIndex + i]);
+                        }
+                    }
+                    break;
+            }
+
+            ship.OccupyCells(cells);
         }
 
         public ShotResult Shoot(string coordinates)
