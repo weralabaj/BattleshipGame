@@ -5,6 +5,7 @@ namespace Battleship.Core
     {
         public Ship? Ship { get; set; }
         public bool HasBeenHit { get; private set; }
+        public bool IsOccupied { get { return Ship != null; } }
 
         public void PlaceShip(Ship ship)
         {

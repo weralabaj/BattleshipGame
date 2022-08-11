@@ -29,7 +29,7 @@ namespace Battleship.Core
 
             if(!CanPlaceShip(ship.Length, startingCoordinates, shipOrientation))
             {
-                throw new ArgumentOutOfRangeException("The ship cannot be places in the specified way.");
+                throw new ArgumentOutOfRangeException("The ship cannot be placed in the specified way.");
             }
 
             switch (shipOrientation)
@@ -68,6 +68,12 @@ namespace Battleship.Core
                             return false;
                         }
 
+                        for (int i = 0; i < shipLength; i++)
+                        {
+                            if (grid[startLocation.RowIndex + i, startLocation.ColumnIndex].IsOccupied)
+                                return false;
+                        }
+
                         return true;
                     }
                 case ShipOrientation.Horizontal:
@@ -75,6 +81,12 @@ namespace Battleship.Core
                         if (startLocation.ColumnIndex + shipLength > Size)
                         {
                             return false;
+                        }
+
+                        for (int i = 0; i < shipLength; i++)
+                        {
+                            if (grid[startLocation.RowIndex, startLocation.ColumnIndex + i].IsOccupied)
+                                return false;
                         }
 
                         return true;

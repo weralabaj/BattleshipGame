@@ -57,5 +57,37 @@ namespace Battleship.Tests
 
             Assert.Throws<ArgumentOutOfRangeException>(() => ocean.PlaceShip(battleship, startCoordinates, shipOrientation));
         }
+
+        [TestCase("A1", ShipOrientation.Vertical)]
+        [TestCase("A1", ShipOrientation.Horizontal)]
+        [TestCase("A2", ShipOrientation.Vertical)]
+        [TestCase("A2", ShipOrientation.Horizontal)]
+        [TestCase("A3", ShipOrientation.Vertical)]
+        [TestCase("A3", ShipOrientation.Horizontal)]
+        [TestCase("A4", ShipOrientation.Vertical)]
+        [TestCase("A4", ShipOrientation.Horizontal)]
+        [TestCase("F10", ShipOrientation.Vertical)]
+        [TestCase("F10", ShipOrientation.Horizontal)]
+        [TestCase("G10", ShipOrientation.Vertical)]
+        [TestCase("G10", ShipOrientation.Horizontal)]
+        [TestCase("H10", ShipOrientation.Vertical)]
+        [TestCase("H10", ShipOrientation.Horizontal)]
+        [TestCase("I10", ShipOrientation.Vertical)]
+        [TestCase("I10", ShipOrientation.Horizontal)]
+        [TestCase("J10", ShipOrientation.Vertical)]
+        [TestCase("J10", ShipOrientation.Horizontal)]
+        public void CannotPlaceShipOverAnotherShip(string startCoordinates, ShipOrientation shipOrientation)
+        {
+            var ocean = new Ocean();
+            var destroyer = new Ship(4);
+            ocean.PlaceShip(destroyer, "A1", ShipOrientation.Vertical);
+            var battleship = new Ship(5);
+            ocean.PlaceShip(battleship, "F10", ShipOrientation.Horizontal);
+
+            var anotherDestroyer = new Ship(4);
+
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => ocean.PlaceShip(anotherDestroyer, startCoordinates, shipOrientation));
+        }
     }
 }
