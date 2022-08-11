@@ -25,7 +25,7 @@ namespace Battleship.Core
         public void PlaceShip(Ship ship, string startingCoordinates, ShipOrientation shipOrientation)
         {
             var cells = new List<Cell>();
-            var startLocation = new Location(startingCoordinates); 
+            var startLocation = new Location(startingCoordinates, Size); 
 
             if(!CanPlaceShip(ship.Length, startingCoordinates, shipOrientation))
             {
@@ -57,7 +57,7 @@ namespace Battleship.Core
 
         private bool CanPlaceShip(int shipLength, string startingCoordinates, ShipOrientation shipOrientation)
         {
-            var startLocation = new Location(startingCoordinates);
+            var startLocation = new Location(startingCoordinates, Size);
 
             switch (shipOrientation)
             {
@@ -91,19 +91,14 @@ namespace Battleship.Core
 
                         return true;
                     }
-                default:
-                    return false;
             }
+
+            return false;
         }
 
         public ShotResult Shoot(string coordinates)
         {
-            var location = new Location(coordinates);
-
-            if(location.RowIndex >= Size || location.ColumnIndex >= Size)
-            {
-                throw new ArgumentOutOfRangeException(nameof(coordinates), "The provided coordinates are out of bound of this board.");
-            }
+            var location = new Location(coordinates, Size);
 
             var cell = grid[location.RowIndex, location.ColumnIndex];
 
