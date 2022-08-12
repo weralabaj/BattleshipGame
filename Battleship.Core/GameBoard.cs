@@ -3,12 +3,12 @@ namespace Battleship.Core
 {
     public enum ShotResult { Hit, Miss, Sink }
     public enum ShipOrientation { Vertical, Horizontal }
-    public class Ocean
+    public class GameBoard
     {
         public int Size { get; private set; }
         private readonly Cell[,] grid;
 
-        public Ocean()
+        public GameBoard()
         {
             Size = 10;
 
