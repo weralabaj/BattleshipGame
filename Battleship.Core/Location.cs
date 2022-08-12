@@ -33,7 +33,7 @@
 
             if (!columnIsValidNumber || tmpColIndex < 0 || tmpColIndex > maxSize - 1 || tmpRowIndex < 0 || tmpRowIndex > maxSize - 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(literalCoordinates), $"Valid board coordination has format '[A-Z][1-{maxSize}].'");
+                throw new ArgumentOutOfRangeException(nameof(literalCoordinates), $"Valid board coordination has format '[A-{(char)(maxSize + 64)}][1-{maxSize}].'");
             }
 
             RowIndex = tmpRowIndex;
