@@ -28,7 +28,7 @@ namespace Battleship.Core
             var battleship = new Ship(5);
             var destroyer1 = new Ship(4);
             var destroyer2 = new Ship(4);
-;
+
             PlaceShipInRandomLocation(randomSeed, battleship);
             PlaceShipInRandomLocation(randomSeed, destroyer1);
             PlaceShipInRandomLocation(randomSeed, destroyer2);

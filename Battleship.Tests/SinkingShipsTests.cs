@@ -7,7 +7,7 @@ namespace Battleship.Tests
     [TestFixture]
     public class SinkingShipsTests
     {
-        private Game _gameBoard;
+        private Game _gameBoard = new Game();
 
         [SetUp]
         public void SetUp()
