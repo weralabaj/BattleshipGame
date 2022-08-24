@@ -52,20 +52,6 @@ namespace Battleship.Tests
         }
 
         [Test]
-        public void DestroyerIsNotSunkIfHittingIt4TimesInTheSameLocation()
-        {
-            var shotResult1 = _gameBoard.Shoot("A1");
-            var shotResult2 = _gameBoard.Shoot("A1");
-            var shotResult3 = _gameBoard.Shoot("A1");
-            var shotResult4 = _gameBoard.Shoot("A1");
-
-            Assert.AreEqual(ShotResult.Hit, shotResult1);
-            Assert.AreEqual(ShotResult.Hit, shotResult2);
-            Assert.AreEqual(ShotResult.Hit, shotResult3);
-            Assert.AreEqual(ShotResult.Hit, shotResult4);
-        }
-
-        [Test]
         public void BattleshipIsSunkOn5thHit()
         {
             var shotResult1 = _gameBoard.Shoot("F10");
@@ -79,6 +65,48 @@ namespace Battleship.Tests
             Assert.AreEqual(ShotResult.Hit, shotResult3);
             Assert.AreEqual(ShotResult.Hit, shotResult4);
             Assert.AreEqual(ShotResult.Sink, shotResult5);
+        }
+
+        [Test]
+        public void DestroyerIsNotSunkIfHittingIt4TimesInTheSameLocation()
+        {
+            _gameBoard.Shoot("A1");
+            _gameBoard.Shoot("A1");
+            _gameBoard.Shoot("A1");
+            var lastShot = _gameBoard.Shoot("A1");
+
+            Assert.AreEqual(ShotResult.Hit, lastShot);
+        }
+
+        [Test]
+        public void BattleshipNotSunkIfNotAllCellsAreHit()
+        {
+            _gameBoard.Shoot("F10");
+            _gameBoard.Shoot("F10");
+            _gameBoard.Shoot("G10");
+            _gameBoard.Shoot("G10");
+            _gameBoard.Shoot("G10");
+            _gameBoard.Shoot("H10");
+            _gameBoard.Shoot("I10");
+            var lastShot = _gameBoard.Shoot("I10");
+
+            Assert.AreEqual(ShotResult.Hit, lastShot);
+        }
+
+        [Test]
+        public void BattleshipSunkIfAllCellsAreHit()
+        {
+            _gameBoard.Shoot("F10");
+            _gameBoard.Shoot("F10");
+            _gameBoard.Shoot("G10");
+            _gameBoard.Shoot("G10");
+            _gameBoard.Shoot("G10");
+            _gameBoard.Shoot("H10");
+            _gameBoard.Shoot("I10");
+            _gameBoard.Shoot("I10");
+            var lastShot = _gameBoard.Shoot("J10");
+
+            Assert.AreEqual(ShotResult.Sink, lastShot);
         }
     }
 }

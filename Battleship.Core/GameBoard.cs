@@ -5,19 +5,19 @@ namespace Battleship.Core
     public enum ShipOrientation { Vertical, Horizontal }
     public class GameBoard
     {
-        public int Size { get; private set; }
-        private readonly Cell[,] grid;
+        private readonly int _size;
+        private readonly Cell[,] _grid;
 
-        public GameBoard()
+        public GameBoard(int size = 10)
         {
-            Size = 10;
+            _size = size;
 
-            grid = new Cell[Size, Size];
-            for (int rowIndex = 0; rowIndex < Size; rowIndex++)
+            _grid = new Cell[_size, _size];
+            for (int rowIndex = 0; rowIndex < _size; rowIndex++)
             {
-                for (int colIndex = 0; colIndex < Size; colIndex++)
+                for (int colIndex = 0; colIndex < _size; colIndex++)
                 {
-                    grid[rowIndex, colIndex] = new Cell();
+                    _grid[rowIndex, colIndex] = new Cell();
                 }
             }
         }
@@ -25,7 +25,7 @@ namespace Battleship.Core
         public void PlaceShip(Ship ship, string startingCoordinates, ShipOrientation shipOrientation)
         {
             var cells = new List<Cell>();
-            var startLocation = new Location(startingCoordinates, Size); 
+            var startLocation = new Location(startingCoordinates, _size); 
 
             if(!CanPlaceShip(ship.Length, startingCoordinates, shipOrientation))
             {
@@ -38,7 +38,7 @@ namespace Battleship.Core
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            cells.Add(grid[startLocation.RowIndex + i, startLocation.ColumnIndex]);
+                            cells.Add(_grid[startLocation.RowIndex + i, startLocation.ColumnIndex]);
                         }
                     }
                     break;
@@ -46,7 +46,7 @@ namespace Battleship.Core
                     {
                         for (int i = 0; i < ship.Length; i++)
                         {
-                            cells.Add(grid[startLocation.RowIndex, startLocation.ColumnIndex + i]);
+                            cells.Add(_grid[startLocation.RowIndex, startLocation.ColumnIndex + i]);
                         }
                     }
                     break;
@@ -57,20 +57,20 @@ namespace Battleship.Core
 
         private bool CanPlaceShip(int shipLength, string startingCoordinates, ShipOrientation shipOrientation)
         {
-            var startLocation = new Location(startingCoordinates, Size);
+            var startLocation = new Location(startingCoordinates, _size);
 
             switch (shipOrientation)
             {
                 case ShipOrientation.Vertical:
                     {
-                        if (startLocation.RowIndex + shipLength > Size)
+                        if (startLocation.RowIndex + shipLength > _size)
                         {
                             return false;
                         }
 
                         for (int i = 0; i < shipLength; i++)
                         {
-                            if (grid[startLocation.RowIndex + i, startLocation.ColumnIndex].IsOccupied)
+                            if (_grid[startLocation.RowIndex + i, startLocation.ColumnIndex].IsOccupied)
                                 return false;
                         }
 
@@ -78,14 +78,14 @@ namespace Battleship.Core
                     }
                 case ShipOrientation.Horizontal:
                     {
-                        if (startLocation.ColumnIndex + shipLength > Size)
+                        if (startLocation.ColumnIndex + shipLength > _size)
                         {
                             return false;
                         }
 
                         for (int i = 0; i < shipLength; i++)
                         {
-                            if (grid[startLocation.RowIndex, startLocation.ColumnIndex + i].IsOccupied)
+                            if (_grid[startLocation.RowIndex, startLocation.ColumnIndex + i].IsOccupied)
                                 return false;
                         }
 
@@ -98,9 +98,9 @@ namespace Battleship.Core
 
         public ShotResult Shoot(string coordinates)
         {
-            var location = new Location(coordinates, Size);
+            var location = new Location(coordinates, _size);
 
-            var cell = grid[location.RowIndex, location.ColumnIndex];
+            var cell = _grid[location.RowIndex, location.ColumnIndex];
 
             return cell.Shoot();
         }

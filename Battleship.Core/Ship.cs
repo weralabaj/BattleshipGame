@@ -20,7 +20,17 @@ namespace Battleship.Core
             }
         }
 
-        public bool IsSunk()
+        public ShotResult Shoot()
+        {
+            if (IsSunk())
+            {
+                return ShotResult.Sink;
+            }
+
+             return ShotResult.Hit;
+        }
+
+        private bool IsSunk()
         {
             return _occupiedCells.All(c => c.HasBeenHit == true);
         }

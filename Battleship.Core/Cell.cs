@@ -1,5 +1,4 @@
-﻿
-namespace Battleship.Core
+﻿namespace Battleship.Core
 {
     public class Cell
     {
@@ -18,12 +17,7 @@ namespace Battleship.Core
 
             if (Ship != null)
             {
-                if (Ship.IsSunk())
-                {
-                    return ShotResult.Sink;
-                }
-
-                return ShotResult.Hit;
+                return Ship.Shoot();
             }
 
             return ShotResult.Miss;
