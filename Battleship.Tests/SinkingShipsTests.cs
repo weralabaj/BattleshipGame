@@ -7,12 +7,12 @@ namespace Battleship.Tests
     [TestFixture]
     public class SinkingShipsTests
     {
-        private GameBoard _gameBoard;
+        private Game _gameBoard;
 
         [SetUp]
         public void SetUp()
         {
-            _gameBoard = new GameBoard();
+            _gameBoard = new Game();
             var destroyer = new Ship(4);
             _gameBoard.PlaceShip(destroyer, "A1", ShipOrientation.Vertical);
             var battleship = new Ship(5);

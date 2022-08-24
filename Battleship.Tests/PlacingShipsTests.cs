@@ -10,9 +10,11 @@ namespace Battleship.Tests
         [Test]
         public void DestroyerOccupiesExpectedCellsAfterPlacing()
         {
-            var gameBoard = new GameBoard();
+            var gameBoard = new Game();
+            var battleship = new Ship(5);
+            gameBoard.PlaceShip(battleship, "F10", ShipOrientation.Horizontal);
+            
             var destroyer = new Ship(4);
-
             gameBoard.PlaceShip(destroyer, "A1", ShipOrientation.Vertical);
 
             var shotResult1 = gameBoard.Shoot("A1");
@@ -29,9 +31,11 @@ namespace Battleship.Tests
         [Test]
         public void BattleshipOccupiesExpectedCellsAfterPlacing()
         {
-            var gameBoard = new GameBoard();
-            var battleship = new Ship(5);
+            var gameBoard = new Game();
+            var destroyer = new Ship(4);
+            gameBoard.PlaceShip(destroyer, "A1", ShipOrientation.Vertical);
 
+            var battleship = new Ship(5);
             gameBoard.PlaceShip(battleship, "F10", ShipOrientation.Horizontal);
 
             var shotResult1 = gameBoard.Shoot("F10");
@@ -52,7 +56,7 @@ namespace Battleship.Tests
         [TestCase("F27", ShipOrientation.Vertical)]
         public void CannotPlaceShipOutsideTheBoard(string startCoordinates, ShipOrientation shipOrientation)
         {
-            var ocean = new GameBoard();
+            var ocean = new Game();
             var battleship = new Ship(5);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => ocean.PlaceShip(battleship, startCoordinates, shipOrientation));
@@ -78,7 +82,7 @@ namespace Battleship.Tests
         [TestCase("J10", ShipOrientation.Horizontal)]
         public void CannotPlaceShipOverAnotherShip(string startCoordinates, ShipOrientation shipOrientation)
         {
-            var ocean = new GameBoard();
+            var ocean = new Game();
             var destroyer = new Ship(4);
             ocean.PlaceShip(destroyer, "A1", ShipOrientation.Vertical);
             var battleship = new Ship(5);

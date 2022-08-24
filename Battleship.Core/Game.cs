@@ -1,14 +1,15 @@
 ﻿
 namespace Battleship.Core
 {
-    public enum ShotResult { Hit, Miss, Sink }
+    public enum ShotResult { Hit, Miss, Sink, GameOver }
     public enum ShipOrientation { Vertical, Horizontal }
-    public class GameBoard
+    public class Game
     {
         private readonly int _size;
         private readonly Cell[,] _grid;
+        private List<Ship> _ships = new List<Ship>();
 
-        public GameBoard(int size = 10)
+        public Game(int size = 10)
         {
             _size = size;
 
@@ -19,6 +20,44 @@ namespace Battleship.Core
                 {
                     _grid[rowIndex, colIndex] = new Cell();
                 }
+            }
+        }
+
+        public void StartNewGame(int? randomSeed = null)
+        {
+            var battleship = new Ship(5);
+            var destroyer1 = new Ship(4);
+            var destroyer2 = new Ship(4);
+;
+            PlaceShipInRandomLocation(randomSeed, battleship);
+            PlaceShipInRandomLocation(randomSeed, destroyer1);
+            PlaceShipInRandomLocation(randomSeed, destroyer2);
+
+            void PlaceShipInRandomLocation(int? randomSeed, Ship ship)
+            {
+                ShipOrientation randomOrientation;
+                Location randomPosition;
+                var internalSeed = randomSeed;
+
+                GenerateRandomPlacement(internalSeed, out randomOrientation, out randomPosition);
+
+                while (!CanPlaceShip(ship.Length, randomPosition.Cooridnates, randomOrientation))
+                {
+                    internalSeed += randomSeed;
+                    GenerateRandomPlacement(internalSeed, out randomOrientation, out randomPosition);
+                }
+
+                PlaceShip(ship, randomPosition.Cooridnates, randomOrientation);
+            }
+
+            void GenerateRandomPlacement(int? randomSeed, out ShipOrientation randomOrientation, out Location randomPosition)
+            {
+                var random = randomSeed != null ? new Random(randomSeed.Value) : new Random();
+
+                var orientationValues = Enum.GetValues(typeof(ShipOrientation));
+                int index = random.Next(maxValue: orientationValues.Length);
+                randomOrientation = (ShipOrientation)orientationValues.GetValue(index);
+                randomPosition = new Location(random.Next(_size), random.Next(_size));
             }
         }
 
@@ -53,6 +92,7 @@ namespace Battleship.Core
             }
 
             ship.OccupyCells(cells);
+            _ships.Add(ship);
         }
 
         private bool CanPlaceShip(int shipLength, string startingCoordinates, ShipOrientation shipOrientation)
@@ -102,7 +142,14 @@ namespace Battleship.Core
 
             var cell = _grid[location.RowIndex, location.ColumnIndex];
 
-            return cell.Shoot();
+            var shotResult = cell.Shoot();
+
+            if(_ships.All(s => s.IsSunk()))
+            {
+                return ShotResult.GameOver;
+            }
+
+            return shotResult;
         }
     }
 }
